@@ -2,32 +2,29 @@ class Babysitter < Formula
   desc "Supervisor for AI dev agents — keeps them on-role, unstuck, and gated"
   homepage "https://github.com/deadsimple-xyz/babysitter"
   url "https://github.com/deadsimple-xyz/babysitter/archive/refs/tags/v0.1.0.tar.gz"
-  sha256 "cfe37b6b82797b137fe922d167fe380ea4399ff5fb5f25037686964757392758"
+  sha256 "7bc944fe884fcd9d33e60ab9acb5dcf1bc0164ebd385c1479604a6ca56b21386"
   license "MIT"
 
   def install
-    # Install everything under libexec preserving structure
     libexec.install "lib", "bin", "rules", "BABYSITTER.md"
 
-    # Wrapper: babysitter
     (bin/"babysitter").write <<~SH
       #!/bin/bash
       exec ruby "#{libexec}/bin/babysitter" "$@"
     SH
     chmod 0755, bin/"babysitter"
-
-    # Make MCP server findable (supervisor references it via babysitter_dir)
     chmod 0755, libexec/"bin/babysitter-mcp"
   end
 
   def caveats
     <<~EOS
-      Requires:
-        - Claude Code CLI (claude)
-        - ANTHROPIC_API_KEY env var
+      Run `hash -r` or open a new terminal, then:
 
-      Usage:
-        babysitter ../my-project "finish the tests"
+        cd your-project
+        babysitter .
+
+      Requires Claude Code CLI (claude).
+      API key is prompted on first run.
     EOS
   end
 

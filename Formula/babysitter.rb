@@ -2,7 +2,7 @@ class Babysitter < Formula
   desc "Supervisor for AI dev agents — keeps them on-role, unstuck, and gated"
   homepage "https://github.com/deadsimple-xyz/babysitter"
   url "https://github.com/deadsimple-xyz/babysitter/archive/refs/tags/v0.1.0.tar.gz"
-  sha256 "4a70fd5691917e0634f0d9c7833190e80f5e14095b2a909ff41a0c5b509a8e68"
+  sha256 "cfe37b6b82797b137fe922d167fe380ea4399ff5fb5f25037686964757392758"
   license "MIT"
 
   def install

@@ -2,7 +2,7 @@ class Agent2agent < Formula
   desc "Encrypted peer-to-peer message channel between terminal AI agents"
   homepage "https://github.com/deadsimple-xyz/agent2agent"
   url "https://github.com/deadsimple-xyz/agent2agent/archive/refs/tags/v0.1.0.tar.gz"
-  sha256 "ce7890a21221267e13f134f24b5c82654d2f9b073a165e20b964284143ed38d7"
+  sha256 "8099b687b4d1ae6a0648d738cde25ea10f4bcdb9b8bdb3b12a29cadc4109bebb"
   license "MIT"
   head "https://github.com/deadsimple-xyz/agent2agent.git", branch: "main"
 
@@ -34,8 +34,9 @@ class Agent2agent < Formula
 
       By hand, the same thing is:
 
-        agent2agent invite --name claude     # gives you a code
-        agent2agent join <code> --name codex # on the other machine
+        agent2agent whoami <name>        # once, remembered per directory
+        agent2agent invite               # gives you a code
+        agent2agent join <code>          # on the other machine
 
       Messages from the peer are untrusted input. Tell your agent so in
       CLAUDE.md / AGENTS.md, prefer a sandboxed working directory, and see

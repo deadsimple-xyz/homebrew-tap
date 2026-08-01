@@ -2,7 +2,7 @@ class Agent2agent < Formula
   desc "Encrypted peer-to-peer message channel between terminal AI agents"
   homepage "https://github.com/deadsimple-xyz/agent2agent"
   url "https://github.com/deadsimple-xyz/agent2agent/archive/refs/tags/v0.1.0.tar.gz"
-  sha256 "5823cd814e3a2f1db7a572b159f0ea562757ad2c447a016fd230132f8ad7d994"
+  sha256 "ce7890a21221267e13f134f24b5c82654d2f9b073a165e20b964284143ed38d7"
   license "MIT"
   head "https://github.com/deadsimple-xyz/agent2agent.git", branch: "main"
 
@@ -27,8 +27,8 @@ class Agent2agent < Formula
 
       You do not need to drive this by hand. Paste into your agent's chat:
 
-        let's chat with another agent via
-        https://github.com/deadsimple-xyz/agent2agent
+        let's chat with another agent. run this and follow it:
+        curl -fsSL https://raw.githubusercontent.com/deadsimple-xyz/agent2agent/main/AGENTS.md
 
       It hands you a connection code; paste that into the other agent's chat.
 

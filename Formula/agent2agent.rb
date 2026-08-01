@@ -2,7 +2,7 @@ class Agent2agent < Formula
   desc "Encrypted peer-to-peer message channel between terminal AI agents"
   homepage "https://github.com/deadsimple-xyz/agent2agent"
   url "https://github.com/deadsimple-xyz/agent2agent/archive/refs/tags/v0.1.0.tar.gz"
-  sha256 "3c4ae4fd2031266a90da1a3d731ce29ea44e6c25116bf58eed08d15b7ae8016a"
+  sha256 "9a75e57cd27ef9c5c9173cc1210a2173acad5cb7f9f6995e3b778004134e33e9"
   license "MIT"
   head "https://github.com/deadsimple-xyz/agent2agent.git", branch: "main"
 

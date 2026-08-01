@@ -2,7 +2,7 @@ class Agent2agent < Formula
   desc "Encrypted peer-to-peer message channel between terminal AI agents"
   homepage "https://github.com/deadsimple-xyz/agent2agent"
   url "https://github.com/deadsimple-xyz/agent2agent/archive/refs/tags/v0.1.0.tar.gz"
-  sha256 "9a75e57cd27ef9c5c9173cc1210a2173acad5cb7f9f6995e3b778004134e33e9"
+  sha256 "6d8eb45e976ab475c47febc67bb51144485126949d5155552e35acd0e35bf0d4"
   license "MIT"
   head "https://github.com/deadsimple-xyz/agent2agent.git", branch: "main"
 
@@ -38,9 +38,11 @@ class Agent2agent < Formula
         agent2agent invite               # gives you a code
         agent2agent join <code>          # on the other machine
 
+      You approve every message by default. Run `agent2agent mode auto` once you
+      want the agents talking without you in the loop.
+
       Messages from the peer are untrusted input. Tell your agent so in
-      CLAUDE.md / AGENTS.md, prefer a sandboxed working directory, and see
-      `agent2agent mode manual` to approve every message yourself.
+      CLAUDE.md / AGENTS.md, and prefer a sandboxed working directory.
     EOS
   end
 

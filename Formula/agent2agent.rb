@@ -1,8 +1,8 @@
 class Agent2agent < Formula
   desc "Encrypted peer-to-peer message channel between terminal AI agents"
   homepage "https://github.com/deadsimple-xyz/agent2agent"
-  url "https://github.com/deadsimple-xyz/agent2agent/archive/refs/tags/v0.1.0.tar.gz"
-  sha256 "9adbe23c81406e838afc9d732fe557af91ea7cb5f4ef0cf378d6052be0b48ff6"
+  url "https://github.com/deadsimple-xyz/agent2agent/archive/refs/tags/v0.2.0.tar.gz"
+  sha256 "7f7fcb02edaaf6da878637d1c0fb4bfeba2f02a46c02de20fd6ff4617a508273"
   license "MIT"
   head "https://github.com/deadsimple-xyz/agent2agent.git", branch: "main"
 
@@ -12,19 +12,8 @@ class Agent2agent < Formula
     system "cargo", "install", *std_cargo_args
   end
 
-  service do
-    run [opt_bin/"agent2agent", "daemon"]
-    keep_alive true
-    log_path var/"log/agent2agent.log"
-    error_log_path var/"log/agent2agent.log"
-  end
-
   def caveats
     <<~EOS
-      Start the daemon:
-
-        brew services start agent2agent
-
       You do not need to drive this by hand. Paste into your agent's chat:
 
         let's chat with another agent:
@@ -48,23 +37,23 @@ class Agent2agent < Formula
 
   test do
     home = testpath/"state"
+    a2a = "#{bin}/agent2agent --home #{home}"
 
-    # `id` generates a keypair on first run and prints its public half.
-    output = shell_output("#{bin}/agent2agent --home #{home} id").strip
-    assert_match(/\A[0-9a-f]{64}\z/, output)
+    # Everything below stays offline: no daemon is started and no peer is dialled.
 
-    # The identity must be stable across runs, otherwise pairing would not hold.
-    assert_equal output, shell_output("#{bin}/agent2agent --home #{home} id").strip
+    # A name is remembered for the working directory, so the agent keeps its identity.
+    assert_equal "clod", shell_output("#{a2a} whoami clod").strip
+    assert_equal "clod", shell_output("#{a2a} whoami").strip
 
-    # A peer can be registered and read back.
-    system bin/"agent2agent", "--home", home, "peer", "add", "codex", output
-    assert_match "codex", shell_output("#{bin}/agent2agent --home #{home} peer list")
+    # Conversations are ephemeral, and there are none until one is opened.
+    assert_match "no conversations", shell_output("#{a2a} sessions")
 
-    # A malformed invite code is rejected without needing a daemon or a network.
-    assert_match "invite code",
-                 shell_output("#{bin}/agent2agent --home #{home} join not-a-code 2>&1", 1)
+    # A malformed invite code is refused outright.
+    assert_match "invite code", shell_output("#{a2a} join not-a-code 2>&1", 1)
 
-    # Commands needing the daemon fail cleanly when it is not running.
-    assert_match "daemon", shell_output("#{bin}/agent2agent --home #{home} status 2>&1", 1)
+    # A key is generated once and then stays put; pairing depends on it.
+    id = shell_output("#{a2a} id").strip
+    assert_match(/\A[0-9a-f]{64}\z/, id)
+    assert_equal id, shell_output("#{a2a} id").strip
   end
 end

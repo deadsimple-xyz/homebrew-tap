@@ -41,13 +41,92 @@ class Carl < Formula
   # Источник — Python sdist (воспроизводимая сборка через hatchling).
   # Содержит bot/, fpf/ и pyproject.toml; не содержит .leo, knowledge, .env.
   url "https://github.com/deadsimple-xyz/carl/releases/download/v0.1.0/leo_bot-0.1.0.tar.gz"
-  version "0.1.0"
   sha256 "33f23175d7e52fc7b94dd7c88590aa544ddae64493f4aa84c85d47796f74c779"
   license :cannot_represent
 
   # Python 3.12+ — runtime. Node — для запуска зафиксированного Codex CLI.
   depends_on "node"
   depends_on "python@3.12"
+
+  # ── Компилируемые пакеты: prebuilt wheel для macOS arm64 ───────────────
+  # Эти пакеты содержат C/Rust-расширения. Wheel не требует компиляции
+  # и устанавливается без сети и build-зависимостей.
+
+  on_arm do
+    resource "aiohttp" do
+      url "https://files.pythonhosted.org/packages/30/07/4bbc222cc8dbe31d4c3e8a5baad2286e4d42026ac0c570027b89afce6344/aiohttp-3.14.3-cp312-cp312-macosx_11_0_arm64.whl"
+      sha256 "617105e2c3018ee38d0c8ce5ee3c84f621a6d8b9f723202aacaff28449ca91ee"
+    end
+
+    resource "frozenlist" do
+      url "https://files.pythonhosted.org/packages/2b/94/5c8a2b50a496b11dd519f4a24cb5496cf125681dd99e94c604ccdea9419a/frozenlist-1.8.0-cp312-cp312-macosx_11_0_arm64.whl"
+      sha256 "f833670942247a14eafbb675458b4e61c82e002a148f49e68257b79296e865c4"
+    end
+
+    resource "multidict" do
+      url "https://files.pythonhosted.org/packages/a9/65/1caac9d4cd32e8433908683446eebc953e82d22b03d10d41a5f0fefe991b/multidict-6.7.1-cp312-cp312-macosx_11_0_arm64.whl"
+      sha256 "b0fa96985700739c4c7853a43c0b3e169360d6855780021bfc6d0f1ce7c123e7"
+    end
+
+    resource "pillow" do
+      url "https://files.pythonhosted.org/packages/d8/66/9a386a92561f402389a4fc70c18838bf6d35eb5eb5c6850b4b2dc64f5048/pillow-12.3.0-cp312-cp312-macosx_11_0_arm64.whl"
+      sha256 "ffd0c5368496f41b0944be820fcb7a838aa6e623d250b01acf2643939c3f99d7"
+    end
+
+    resource "propcache" do
+      url "https://files.pythonhosted.org/packages/2c/7d/49777a3e20b55863d4794384a38acd460c04157b0a00f8602b0d508b8431/propcache-0.5.2-cp312-cp312-macosx_11_0_arm64.whl"
+      sha256 "e5cbfac9f61484f7e9f3597775500cd3ebe8274e9b050c38f9525c77c97520bf"
+    end
+
+    resource "pydantic-core" do
+      url "https://files.pythonhosted.org/packages/19/95/6195171e385007300f0f5574592e467c568becce2d937a0b6804f218bc49/pydantic_core-2.46.4-cp312-cp312-macosx_11_0_arm64.whl"
+      sha256 "962ccbab7b642487b1d8b7df90ef677e03134cf1fd8880bf698649b22a69371f"
+    end
+
+    resource "yarl" do
+      url "https://files.pythonhosted.org/packages/ea/b4/05b4131c407006cd1e410e9c6539f16a0945724677e5364447313c15ea3e/yarl-1.24.5-cp312-cp312-macosx_11_0_arm64.whl"
+      sha256 "9d399bdcfb4a0f659b9b3788bbc89babe63d9a6a65aacdf4d4e7065ff2e6316c"
+    end
+  end
+
+  # ── Компилируемые пакеты: prebuilt wheel для macOS x86_64 ──────────────
+
+  on_intel do
+    resource "aiohttp" do
+      url "https://files.pythonhosted.org/packages/88/11/e7a70a209eb9a067c0d3212b518a0134e3484f5178c7533878b6b514d469/aiohttp-3.14.3-cp312-cp312-macosx_10_13_x86_64.whl"
+      sha256 "5bcb6ff3fdab1258a192679ff1a05d44f59626430aa05cd1a9d2447423599228"
+    end
+
+    resource "frozenlist" do
+      url "https://files.pythonhosted.org/packages/64/80/4f6e318ee2a7c0750ed724fa33a4bdf1eacdc5a39a7a24e818a773cd91af/frozenlist-1.8.0-cp312-cp312-macosx_10_13_x86_64.whl"
+      sha256 "229bf37d2e4acdaf808fd3f06e854a4a7a3661e871b10dc1f8f1896a3b05f18b"
+    end
+
+    resource "multidict" do
+      url "https://files.pythonhosted.org/packages/fe/cf/18ef143a81610136d3da8193da9d80bfe1cb548a1e2d1c775f26b23d024a/multidict-6.7.1-cp312-cp312-macosx_10_13_x86_64.whl"
+      sha256 "3fccb473e87eaa1382689053e4a4618e7ba7b9b9b8d6adf2027ee474597128cd"
+    end
+
+    resource "pillow" do
+      url "https://files.pythonhosted.org/packages/37/bf/fb3ebff8ddcb76aac5a01389251bbbb9519922a9b520d8247c1ca864a25d/pillow-12.3.0-cp312-cp312-macosx_10_13_x86_64.whl"
+      sha256 "ba09209fbe443b4acccebe845d8a138b89a8f4fbaeedd44953490b5315d5e965"
+    end
+
+    resource "propcache" do
+      url "https://files.pythonhosted.org/packages/e6/13/b8ae04c59392f8d11c6cd9fb4011d1dc7c86b81225c770280300e259ffe1/propcache-0.5.2-cp312-cp312-macosx_10_13_x86_64.whl"
+      sha256 "db2b80ea58eab4f86b2beec3cc8b39e8ff9276ac20e96b7cce43c8ae84cd6b5a"
+    end
+
+    resource "pydantic-core" do
+      url "https://files.pythonhosted.org/packages/ce/8c/af022f0af448d7747c5154288d46b5f2bc5f17366eaa0e23e9aa04d59f3b/pydantic_core-2.46.4-cp312-cp312-macosx_10_12_x86_64.whl"
+      sha256 "3245406455a5d98187ec35530fd772b1d799b26667980872c8d4614991e2c4a2"
+    end
+
+    resource "yarl" do
+      url "https://files.pythonhosted.org/packages/03/4d/8ad27f9a1b7e69313cca5d695b925b48efe51208d3490e0844bae97cabc0/yarl-1.24.5-cp312-cp312-macosx_10_13_x86_64.whl"
+      sha256 "3363fcc96e665878946ad7a106b9a13eac0541766a690ef287c0232ac768b6ec"
+    end
+  end
 
   # ── Python runtime-зависимости: чистый Python (sdist) ──────────────────
   # Обновление: `uv lock` → перегенерировать блоки из uv.lock (исключая
@@ -135,85 +214,6 @@ class Carl < Formula
     sha256 "547274fa6b0a561ccf549cc9524b999a578e737d015d8709d021f9d0d13bea47"
   end
 
-  # ── Компилируемые пакеты: prebuilt wheel для macOS arm64 ───────────────
-  # Эти пакеты содержат C/Rust-расширения. Wheel не требует компиляции
-  # и устанавливается без сети и build-зависимостей.
-
-  on_arm do
-    resource "aiohttp" do
-      url "https://files.pythonhosted.org/packages/30/07/4bbc222cc8dbe31d4c3e8a5baad2286e4d42026ac0c570027b89afce6344/aiohttp-3.14.3-cp312-cp312-macosx_11_0_arm64.whl"
-      sha256 "617105e2c3018ee38d0c8ce5ee3c84f621a6d8b9f723202aacaff28449ca91ee"
-    end
-
-    resource "frozenlist" do
-      url "https://files.pythonhosted.org/packages/2b/94/5c8a2b50a496b11dd519f4a24cb5496cf125681dd99e94c604ccdea9419a/frozenlist-1.8.0-cp312-cp312-macosx_11_0_arm64.whl"
-      sha256 "f833670942247a14eafbb675458b4e61c82e002a148f49e68257b79296e865c4"
-    end
-
-    resource "multidict" do
-      url "https://files.pythonhosted.org/packages/a9/65/1caac9d4cd32e8433908683446eebc953e82d22b03d10d41a5f0fefe991b/multidict-6.7.1-cp312-cp312-macosx_11_0_arm64.whl"
-      sha256 "b0fa96985700739c4c7853a43c0b3e169360d6855780021bfc6d0f1ce7c123e7"
-    end
-
-    resource "pillow" do
-      url "https://files.pythonhosted.org/packages/d8/66/9a386a92561f402389a4fc70c18838bf6d35eb5eb5c6850b4b2dc64f5048/pillow-12.3.0-cp312-cp312-macosx_11_0_arm64.whl"
-      sha256 "ffd0c5368496f41b0944be820fcb7a838aa6e623d250b01acf2643939c3f99d7"
-    end
-
-    resource "propcache" do
-      url "https://files.pythonhosted.org/packages/2c/7d/49777a3e20b55863d4794384a38acd460c04157b0a00f8602b0d508b8431/propcache-0.5.2-cp312-cp312-macosx_11_0_arm64.whl"
-      sha256 "e5cbfac9f61484f7e9f3597775500cd3ebe8274e9b050c38f9525c77c97520bf"
-    end
-
-    resource "pydantic-core" do
-      url "https://files.pythonhosted.org/packages/19/95/6195171e385007300f0f5574592e467c568becce2d937a0b6804f218bc49/pydantic_core-2.46.4-cp312-cp312-macosx_11_0_arm64.whl"
-      sha256 "962ccbab7b642487b1d8b7df90ef677e03134cf1fd8880bf698649b22a69371f"
-    end
-
-    resource "yarl" do
-      url "https://files.pythonhosted.org/packages/ea/b4/05b4131c407006cd1e410e9c6539f16a0945724677e5364447313c15ea3e/yarl-1.24.5-cp312-cp312-macosx_11_0_arm64.whl"
-      sha256 "9d399bdcfb4a0f659b9b3788bbc89babe63d9a6a65aacdf4d4e7065ff2e6316c"
-    end
-  end
-
-  # ── Компилируемые пакеты: prebuilt wheel для macOS x86_64 ──────────────
-
-  on_intel do
-    resource "aiohttp" do
-      url "https://files.pythonhosted.org/packages/88/11/e7a70a209eb9a067c0d3212b518a0134e3484f5178c7533878b6b514d469/aiohttp-3.14.3-cp312-cp312-macosx_10_13_x86_64.whl"
-      sha256 "5bcb6ff3fdab1258a192679ff1a05d44f59626430aa05cd1a9d2447423599228"
-    end
-
-    resource "frozenlist" do
-      url "https://files.pythonhosted.org/packages/64/80/4f6e318ee2a7c0750ed724fa33a4bdf1eacdc5a39a7a24e818a773cd91af/frozenlist-1.8.0-cp312-cp312-macosx_10_13_x86_64.whl"
-      sha256 "229bf37d2e4acdaf808fd3f06e854a4a7a3661e871b10dc1f8f1896a3b05f18b"
-    end
-
-    resource "multidict" do
-      url "https://files.pythonhosted.org/packages/fe/cf/18ef143a81610136d3da8193da9d80bfe1cb548a1e2d1c775f26b23d024a/multidict-6.7.1-cp312-cp312-macosx_10_13_x86_64.whl"
-      sha256 "3fccb473e87eaa1382689053e4a4618e7ba7b9b9b8d6adf2027ee474597128cd"
-    end
-
-    resource "pillow" do
-      url "https://files.pythonhosted.org/packages/37/bf/fb3ebff8ddcb76aac5a01389251bbbb9519922a9b520d8247c1ca864a25d/pillow-12.3.0-cp312-cp312-macosx_10_13_x86_64.whl"
-      sha256 "ba09209fbe443b4acccebe845d8a138b89a8f4fbaeedd44953490b5315d5e965"
-    end
-
-    resource "propcache" do
-      url "https://files.pythonhosted.org/packages/e6/13/b8ae04c59392f8d11c6cd9fb4011d1dc7c86b81225c770280300e259ffe1/propcache-0.5.2-cp312-cp312-macosx_10_13_x86_64.whl"
-      sha256 "db2b80ea58eab4f86b2beec3cc8b39e8ff9276ac20e96b7cce43c8ae84cd6b5a"
-    end
-
-    resource "pydantic-core" do
-      url "https://files.pythonhosted.org/packages/ce/8c/af022f0af448d7747c5154288d46b5f2bc5f17366eaa0e23e9aa04d59f3b/pydantic_core-2.46.4-cp312-cp312-macosx_10_12_x86_64.whl"
-      sha256 "3245406455a5d98187ec35530fd772b1d799b26667980872c8d4614991e2c4a2"
-    end
-
-    resource "yarl" do
-      url "https://files.pythonhosted.org/packages/03/4d/8ad27f9a1b7e69313cca5d695b925b48efe51208d3490e0844bae97cabc0/yarl-1.24.5-cp312-cp312-macosx_10_13_x86_64.whl"
-      sha256 "3363fcc96e665878946ad7a106b9a13eac0541766a690ef287c0232ac768b6ec"
-    end
-  end
 
   # ── Codex CLI (npm, self-contained) ──────────────────────────────────────
   # Пакет @openai/codex — self-contained: vendored бинарники для всех платформ

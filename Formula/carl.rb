@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Homebrew-формула для Carl — персонального Telegram-бота с методологией ФПФ.
 #
 # Layout:
@@ -39,13 +41,13 @@ class Carl < Formula
   # Источник — Python sdist (воспроизводимая сборка через hatchling).
   # Содержит bot/, fpf/ и pyproject.toml; не содержит .leo, knowledge, .env.
   url "https://github.com/deadsimple-xyz/carl/releases/download/v0.1.0/leo_bot-0.1.0.tar.gz"
-  sha256 "33f23175d7e52fc7b94dd7c88590aa544ddae64493f4aa84c85d47796f74c779"
   version "0.1.0"
-  license "UNLICENSED"
+  sha256 "33f23175d7e52fc7b94dd7c88590aa544ddae64493f4aa84c85d47796f74c779"
+  license :cannot_represent
 
   # Python 3.12+ — runtime. Node — для запуска зафиксированного Codex CLI.
-  depends_on "python@3.12"
   depends_on "node"
+  depends_on "python@3.12"
 
   # ── Python runtime-зависимости: чистый Python (sdist) ──────────────────
   # Обновление: `uv lock` → перегенерировать блоки из uv.lock (исключая
@@ -238,12 +240,13 @@ class Carl < Formula
     # ставим из локальных tarball/wheel (скачаны на этапе brew fetch, проверены по sha256).
     # Компилируемые пакеты — prebuilt wheel (не требуют C compiler / сети).
     # virtualenv_create возвращает объект Virtualenv с методом pip_install.
-    python = Formula["python@3.12"].opt_bin/"python3.12"
+    python = formula_opt_bin("python@3.12")/"python3.12"
     venv = virtualenv_create(libexec/"venv", python)
 
     # Runtime-зависимости из resource-блоков (только Python, не codex).
     resources.each do |r|
       next if r.name == "codex"
+
       venv.pip_install r
     end
 
@@ -287,7 +290,7 @@ class Carl < Formula
       #!/bin/bash
       exec env \\
         CODEX_BIN="#{codex_dir}/bin/codex.js" \\
-        PATH="#{libexec}/bin:#{Formula["node"].opt_bin}:$PATH" \\
+        PATH="#{libexec}/bin:#{formula_opt_bin("node")}:$PATH" \\
         "#{venv}/bin/python" -m bot.cli "$@"
     SH
     carl_exe.chmod 0755
@@ -314,29 +317,29 @@ class Carl < Formula
     site_packages = Dir[(libexec/"venv/lib/python*/site-packages").to_s].first
     fpf_dir = Pathname.new(site_packages)/"fpf"
     pinned = fpf_dir/"PINNED.md"
-    assert_predicate pinned, :exist?, "PINNED.md должен быть установлен в site-packages/fpf/"
+    assert_path_exists pinned, "PINNED.md должен быть установлен в site-packages/fpf/"
     pinned_content = pinned.read
     assert_match(/FPF-Spec\.md/, pinned_content, "PINNED.md должен ссылаться на FPF-Spec.md")
-    assert_predicate fpf_dir/"FPF-Spec.md", :exist?, "FPF-Spec.md должен быть установлен"
+    assert_path_exists fpf_dir/"FPF-Spec.md", "FPF-Spec.md должен быть установлен"
     assert_predicate fpf_dir/"FPF-Spec.md", :size?, "FPF-Spec.md не должен быть пустым"
 
     # Codex CLI: проверяем наличие platform binary для текущей архитектуры
     # и запускаем codex.js через node для проверки версии.
     codex_js = libexec/"lib/codex/bin/codex.js"
-    assert_predicate codex_js, :exist?, "codex.js должен быть установлен в libexec/lib/codex/bin/"
+    assert_path_exists codex_js, "codex.js должен быть установлен в libexec/lib/codex/bin/"
 
     # Проверяем наличие platform binary (не только codex.js).
-    if Hardware::CPU.arm?
-      target_triple = "aarch64-apple-darwin"
+    target_triple = if Hardware::CPU.arm?
+      "aarch64-apple-darwin"
     else
-      target_triple = "x86_64-apple-darwin"
+      "x86_64-apple-darwin"
     end
     platform_binary = libexec/"lib/codex/vendor"/target_triple/"codex/codex"
-    assert_predicate platform_binary, :exist?,
-      "platform binary #{target_triple}/codex/codex должен быть установлен в vendor/"
+    assert_path_exists platform_binary,
+                       "platform binary #{target_triple}/codex/codex должен быть установлен в vendor/"
 
     # Запускаем codex.js через node и проверяем версию.
-    codex_version_out = shell_output("#{Formula["node"].opt_bin}/node #{codex_js} --version 2>&1").strip
+    codex_version_out = shell_output("#{formula_opt_bin("node")}/node #{codex_js} --version 2>&1").strip
     assert_match(/\d+\.\d+/, codex_version_out, "codex --version должен содержать номер версии")
   end
 end

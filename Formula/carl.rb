@@ -214,7 +214,6 @@ class Carl < Formula
     sha256 "547274fa6b0a561ccf549cc9524b999a578e737d015d8709d021f9d0d13bea47"
   end
 
-
   # ── Codex CLI (npm, self-contained) ──────────────────────────────────────
   # Пакет @openai/codex — self-contained: vendored бинарники для всех платформ
   # (aarch64-apple-darwin, x86_64-apple-darwin, …) включены в tarball.

@@ -39,9 +39,8 @@ class Carl < Formula
   # Источник — Python sdist (воспроизводимая сборка через hatchling).
   # Содержит bot/, fpf/ и pyproject.toml; не содержит .leo, knowledge, .env.
   url "https://github.com/deadsimple-xyz/carl/releases/download/v0.1.0/leo_bot-0.1.0.tar.gz"
-  version "0.1.0"
   sha256 "33f23175d7e52fc7b94dd7c88590aa544ddae64493f4aa84c85d47796f74c779"
-  license "UNLICENSED"
+  license :cannot_represent
 
   # Python 3.12+ — runtime. Node — для запуска зафиксированного Codex CLI.
   depends_on "node"

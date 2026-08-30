@@ -216,7 +216,8 @@ class Carl < Formula
     # системным C compiler (Xcode CLT).
     # virtualenv_create возвращает объект Virtualenv с методом pip_install.
     python = formula_opt_bin("python@3.12")/"python3.12"
-    venv = virtualenv_create(libexec/"venv", python)
+    venv_root = libexec/"venv"
+    venv = virtualenv_create(venv_root, python)
 
     # Runtime-зависимости из resource-блоков (только Python, не codex).
     resources.each do |r|
@@ -230,7 +231,7 @@ class Carl < Formula
     # hatchling (build-system) в build-окружении, а build isolation скачал
     # бы его из сети. Вместо этого копируем пакет в site-packages venv
     # напрямую: entry point создаём вручную.
-    site_packages = Pathname.new(Dir[venv/"lib/python*/site-packages"].first)
+    site_packages = Pathname.new(Dir[venv_root/"lib/python*/site-packages"].first)
     # Pathname#install копирует источник ВНУТРЬ целевой директории:
     # site_packages.install buildpath/"bot" → site-packages/bot/
     # НЕ (site_packages/"bot").install — это создаст site-packages/bot/bot/.
@@ -266,7 +267,7 @@ class Carl < Formula
       exec env \\
         CODEX_BIN="#{codex_dir}/bin/codex.js" \\
         PATH="#{libexec}/bin:#{formula_opt_bin("node")}:$PATH" \\
-        "#{venv}/bin/python" -m bot.cli "$@"
+        "#{venv_root}/bin/python" -m bot.cli "$@"
     SH
     carl_exe.chmod 0755
 

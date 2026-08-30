@@ -314,7 +314,7 @@ class Carl < Formula
     assert_path_exists platform_binary,
                        "platform binary #{target_triple}/codex/codex должен быть установлен в vendor/"
 
-    # Запускаем codex.js через node и проверяем версию.
+    # Platform binary исполняем; codex.js через него НЕ запускаем.
     # `codex.js --version` is not run here: inside the brew-test sandbox (no
     # network, no TTY) it blocks until Homebrew's timeout (host run 4, 30 Aug).
     assert_predicate platform_binary, :executable?, "platform binary должен быть исполняемым"

@@ -28,7 +28,7 @@
 #      Homebrew всегда ставит Python resources из исходников
 #      (`pip install --no-binary=:all:`) — wheel-URL не работают ни для
 #      одного пакета. Все resource-блоки, включая компилируемые
-#      (pydantic-core, pillow, aiohttp, frozenlist, multidict, propcache,
+#      (pydantic-core, aiohttp, frozenlist, multidict, propcache,
 #      yarl), — PyPI sdist (.tar.gz); URL и sha256 берутся из поля sdist
 #      в uv.lock (эквивалент вывода `brew update-python-resources`).
 #   2. Codex:  обновить CODEX_VERSION и sha256 ресурса codex.
@@ -45,12 +45,16 @@ class Carl < Formula
   # Источник — Python sdist (воспроизводимая сборка через hatchling).
   # Содержит bot/, fpf/ и pyproject.toml; не содержит .leo, knowledge, .env.
   url "https://github.com/deadsimple-xyz/carl/releases/download/v0.1.0/leo_bot-0.1.0.tar.gz"
-  sha256 "33f23175d7e52fc7b94dd7c88590aa544ddae64493f4aa84c85d47796f74c779"
+  sha256 "89ef66bdded084019e67a5af451dcd0cb3d70425de6a17f2499cf8e5cff777d2"
   license :cannot_represent
 
   # Python 3.12+ — runtime. Node — для запуска зафиксированного Codex CLI.
   depends_on "node"
   depends_on "python@3.12"
+  # rust — build-time зависимость pydantic-core. Пакет собирается из sdist
+  # через maturin, которому нужен Rust-тулчейн (cargo/rustc); полагаться на
+  # случайно установленный rustc на хосте нельзя — формула требует его явно.
+  depends_on "rust" => :build
 
   # Короткое имя formula совпадает с homebrew/core/carl (Calendar CLI,
   # codeberg.org/birger/carl) — обе формулы ставят бинарник `carl`.
@@ -58,7 +62,7 @@ class Carl < Formula
   # ── Python runtime-зависимости ────────────────────────────
   # Homebrew ставит Python resources из исходников (`pip install
   # --no-binary=:all:`), поэтому все resource-блоки — PyPI sdist,
-  # включая ранее-wheel компилируемые пакеты (pydantic-core, pillow,
+  # включая ранее-wheel компилируемые пакеты (pydantic-core,
   # aiohttp, frozenlist, multidict, propcache, yarl).
   # Обновление: `uv lock` → перегенерировать блоки из uv.lock (исключая
   # leo-bot, pytest, pytest-asyncio, respx, ruff, iniconfig, colorama,
@@ -145,11 +149,6 @@ class Carl < Formula
     sha256 "ec6652a1bee61c53a3e5776b6049172c53b6aaba34f18c9ad04f82712bac623d"
   end
 
-  resource "pillow" do
-    url "https://files.pythonhosted.org/packages/1c/3d/bb7fca845737cf9d7dbde16ed1843984665ff2e0a518f5db43e77ec540b9/pillow-12.3.0.tar.gz"
-    sha256 "3b8182a766685eaa002637e28b4ec8d6b18819a0c71f579bf0dbaa5830297cce"
-  end
-
   resource "propcache" do
     url "https://files.pythonhosted.org/packages/ec/44/c87281c333769159c50594f22610f77398a47ccbfbbf23074e744e86f87c/propcache-0.5.2.tar.gz"
     sha256 "01c4fc7480cd0598bb4b57022df55b9ca296da7fc5a8760bd8451a7e63a7d427"
@@ -205,7 +204,7 @@ class Carl < Formula
     # ставим из локальных sdist tarball (скачаны на этапе brew fetch, проверены
     # по sha256). Homebrew всегда собирает Python resources из исходников
     # (`pip install --no-binary=:all:`), поэтому компилируемые пакеты
-    # (pydantic-core, pillow, aiohttp, frozenlist, multidict, propcache, yarl)
+    # (pydantic-core, aiohttp, frozenlist, multidict, propcache, yarl)
     # тоже собираются на месте — без сети (build isolation отключена), но с
     # системным C compiler (Xcode CLT).
     # virtualenv_create возвращает объект Virtualenv с методом pip_install.

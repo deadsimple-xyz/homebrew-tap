@@ -35,7 +35,13 @@
 #      Пакет @openai/codex — self-contained: vendored бинарники для всех
 #      платформ включены в tarball, npm-зависимостей нет.
 #      SHA256: `shasum -a 256` скачанного .tgz.
-#   3. Source: `python -m build --sdist` → shasum -a 256 dist/leo_bot-*.tar.gz
+#   3. Source: новая версия — новый неизменяемый тег. Собрать
+#      `python -m build --sdist`, опубликовать именно этот файл как release
+#      asset (`gh release create`, без --clobber поверх существующего тега),
+#      затем взять SHA256 уже ОПУБЛИКОВАННОГО файла:
+#      `curl -sL <url-релиза> | shasum -a 256`. Хэш локальной пересборки не
+#      подставлять — check_formula.py сверяет формулу с реальным
+#      опубликованным asset, а не с dist/.
 #
 class Carl < Formula
   include Language::Python::Virtualenv
@@ -45,7 +51,7 @@ class Carl < Formula
   # Источник — Python sdist (воспроизводимая сборка через hatchling).
   # Содержит bot/, fpf/ и pyproject.toml; не содержит .leo, knowledge, .env.
   url "https://github.com/deadsimple-xyz/carl/releases/download/v0.1.0/leo_bot-0.1.0.tar.gz"
-  sha256 "89ef66bdded084019e67a5af451dcd0cb3d70425de6a17f2499cf8e5cff777d2"
+  sha256 "33f23175d7e52fc7b94dd7c88590aa544ddae64493f4aa84c85d47796f74c779"
   license :cannot_represent
 
   # rust — build-time зависимость pydantic-core. Пакет собирается из sdist

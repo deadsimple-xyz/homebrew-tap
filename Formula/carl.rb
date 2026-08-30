@@ -54,8 +54,8 @@ class Carl < Formula
   homepage "https://github.com/deadsimple-xyz/carl"
   # Источник — Python sdist (воспроизводимая сборка через hatchling).
   # Содержит bot/, fpf/ и pyproject.toml; не содержит .leo, knowledge, .env.
-  url "https://github.com/deadsimple-xyz/carl/releases/download/v0.1.0/leo_bot-0.1.0.tar.gz"
-  sha256 "33f23175d7e52fc7b94dd7c88590aa544ddae64493f4aa84c85d47796f74c779"
+  url "https://github.com/deadsimple-xyz/carl/releases/download/v0.1.1/leo_bot-0.1.1.tar.gz"
+  sha256 "225fd7ba57951e565e66b014640aaaea675ca64ba1431a89b0b38068b06406d5"
   license :cannot_represent
 
   # rust — build-time зависимость pydantic-core. Пакет собирается из sdist

@@ -48,13 +48,14 @@ class Carl < Formula
   sha256 "89ef66bdded084019e67a5af451dcd0cb3d70425de6a17f2499cf8e5cff777d2"
   license :cannot_represent
 
-  # Python 3.12+ — runtime. Node — для запуска зафиксированного Codex CLI.
-  depends_on "node"
-  depends_on "python@3.12"
   # rust — build-time зависимость pydantic-core. Пакет собирается из sdist
   # через maturin, которому нужен Rust-тулчейн (cargo/rustc); полагаться на
   # случайно установленный rustc на хосте нельзя — формула требует его явно.
+  # Build-зависимости объявляются раньше runtime (требование brew audit --strict).
   depends_on "rust" => :build
+  # Python 3.12+ — runtime. Node — для запуска зафиксированного Codex CLI.
+  depends_on "node"
+  depends_on "python@3.12"
 
   # Короткое имя formula совпадает с homebrew/core/carl (Calendar CLI,
   # codeberg.org/birger/carl) — обе формулы ставят бинарник `carl`.

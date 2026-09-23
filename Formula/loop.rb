@@ -34,8 +34,13 @@ class LoopReleaseDownloadStrategy < CurlDownloadStrategy
         )
       end
 
-      release = GitHub::API.open_rest("#{GitHub::API_URL}/repos/#{owner}/#{repository}/releases/tags/#{tag}")
-      found = release.fetch("assets", []).find { |candidate| candidate["name"] == asset }
+      # The release's own `assets` array was measured EMPTY on a private-repository release whose assets were
+      # uploaded and listed by the release's assets endpoint (loop-v0.1.0, 23 Sep 2026), so the assets are read
+      # from that endpoint, by the release id the tag resolves to.
+      base = "#{GitHub::API_URL}/repos/#{owner}/#{repository}/releases"
+      release = GitHub::API.open_rest("#{base}/tags/#{tag}")
+      assets = GitHub::API.open_rest("#{base}/#{release.fetch("id")}/assets?per_page=100")
+      found = assets.find { |candidate| candidate["name"] == asset }
       raise CurlDownloadStrategyError.new(url, "loop_release_asset_missing: #{asset} on #{tag}") if found.nil?
 
       meta[:headers] = ["Authorization: Bearer #{token}", "Accept: application/octet-stream"]

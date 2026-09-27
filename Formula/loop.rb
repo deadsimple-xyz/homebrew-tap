@@ -52,16 +52,16 @@ end
 class Loop < Formula
   desc "GitHub-native autonomous product delivery, run as a background service"
   homepage "https://github.com/deadsimple-xyz/loop"
-  url "https://github.com/deadsimple-xyz/loop/releases/download/loop-v0.1.80/loop-0.1.80-darwin-arm64.tar.gz",
+  url "https://github.com/deadsimple-xyz/loop/releases/download/loop-v0.1.81/loop-0.1.81-darwin-arm64.tar.gz",
       using: LoopReleaseDownloadStrategy
-  version "0.1.80"
-  sha256 "80e41c8d4dbf2dbb17654b2c6fed954e8abbad13ab1ab50d5fcf387f0404c4be"
+  version "0.1.81"
+  sha256 "2d1cb188836aef35666fcc9c0e5cd8184b54f13209fb424423fe7b4522cf2f1f"
 
   depends_on arch: :arm64
   # The host's tunnel connector (infra/loop-host/launchd/loop-cloudflared runs /opt/homebrew/bin/cloudflared).
   depends_on "cloudflared"
-  # Every Loop worker runs Tart guests; install it with Loop rather than asking during worker setup.
-  depends_on "deadsimple-xyz/tap/tart"
+  # Every Loop worker uses the same pinned Tart without disturbing another tap's installation.
+  depends_on "deadsimple-xyz/tap/loop-tart"
   # `loop create`: the GitHub CLI for the owner's token (/opt/homebrew/bin/gh), and the two tools
   # lib/loop-product-operations.mjs pins by exact Cellar path and version (gitleaks 8.30.1, git-filter-repo 2.47.0).
   depends_on "gh"

@@ -52,10 +52,10 @@ end
 class Loop < Formula
   desc "GitHub-native autonomous product delivery, run as a background service"
   homepage "https://github.com/deadsimple-xyz/loop"
-  url "https://github.com/deadsimple-xyz/loop/releases/download/loop-v0.1.82/loop-0.1.82-darwin-arm64.tar.gz",
+  url "https://github.com/deadsimple-xyz/loop/releases/download/loop-v0.1.83/loop-0.1.83-darwin-arm64.tar.gz",
       using: LoopReleaseDownloadStrategy
-  version "0.1.82"
-  sha256 "f8b6902252bd0f1c7e0da41cb1c7bbbe2819c1d05cde20b91b896b223309a8ef"
+  version "0.1.83"
+  sha256 "4c82ff38c0a4c79f70c6cb7cf1b761e9572440fa4d57c45960554511ace78948"
 
   depends_on arch: :arm64
   # The host's tunnel connector (infra/loop-host/launchd/loop-cloudflared runs /opt/homebrew/bin/cloudflared).
@@ -80,14 +80,15 @@ class Loop < Formula
 
   def install
     libexec.install Dir["libexec/*"]
-    resource("tart").stage { (libexec/"tart").install "tart.app", "LICENSE" }
-    resource("softnet").stage { (libexec/"tart"/"softnet").install "softnet" }
-    (bin/"tart").write <<~SH
+    resource("tart").stage { (libexec/"loop-tart").install "tart.app", "LICENSE" }
+    resource("softnet").stage { (libexec/"loop-tart"/"softnet").install "softnet" }
+    (libexec/"loop-tart"/"bin").mkpath
+    (libexec/"loop-tart"/"bin"/"tart").write <<~SH
       #!/bin/bash
-      export PATH="#{opt_libexec}/tart/softnet:$PATH"
-      exec "#{opt_libexec}/tart/tart.app/Contents/MacOS/tart" "$@"
+      export PATH="#{opt_libexec}/loop-tart/softnet:$PATH"
+      exec "#{opt_libexec}/loop-tart/tart.app/Contents/MacOS/tart" "$@"
     SH
-    chmod 0755, bin/"tart"
+    chmod 0755, libexec/"loop-tart"/"bin"/"tart"
     (bin/"loop").write <<~SH
       #!/bin/bash
       exec "#{opt_libexec}/node/bin/node" "#{opt_libexec}/services/loop-orchestrator/tools/loop.mjs" "$@"
@@ -119,6 +120,6 @@ class Loop < Formula
 
   test do
     assert_match version.to_s, shell_output("#{bin}/loop version")
-    assert_match "2.37.0", shell_output("#{bin}/tart --version")
+    assert_match "2.37.0", shell_output("#{libexec}/loop-tart/bin/tart --version")
   end
 end

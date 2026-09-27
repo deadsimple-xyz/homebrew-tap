@@ -52,16 +52,23 @@ end
 class Loop < Formula
   desc "GitHub-native autonomous product delivery, run as a background service"
   homepage "https://github.com/deadsimple-xyz/loop"
-  url "https://github.com/deadsimple-xyz/loop/releases/download/loop-v0.1.81/loop-0.1.81-darwin-arm64.tar.gz",
+  url "https://github.com/deadsimple-xyz/loop/releases/download/loop-v0.1.82/loop-0.1.82-darwin-arm64.tar.gz",
       using: LoopReleaseDownloadStrategy
-  version "0.1.81"
-  sha256 "2d1cb188836aef35666fcc9c0e5cd8184b54f13209fb424423fe7b4522cf2f1f"
+  version "0.1.82"
+  sha256 "f8b6902252bd0f1c7e0da41cb1c7bbbe2819c1d05cde20b91b896b223309a8ef"
 
   depends_on arch: :arm64
   # The host's tunnel connector (infra/loop-host/launchd/loop-cloudflared runs /opt/homebrew/bin/cloudflared).
   depends_on "cloudflared"
-  # Every Loop worker uses the same pinned Tart without disturbing another tap's installation.
-  depends_on "deadsimple-xyz/tap/loop-tart"
+  # Tart and Softnet are resources of this one formula. No second tap formula or trust step is needed.
+  resource "tart" do
+    url "https://github.com/openai/tart/releases/download/2.37.0/tart.tar.gz"
+    sha256 "d531752c4dad5d4214ac7ff540cefc2647df1fca2338d413d3c01754f54b356b"
+  end
+  resource "softnet" do
+    url "https://github.com/openai/softnet/releases/download/0.23.0/softnet.tar.gz"
+    sha256 "b5daa4e5efaef3c2716f872dcda3961a35b2bddcdf03fe630ac3db0ab8156f3e"
+  end
   # `loop create`: the GitHub CLI for the owner's token (/opt/homebrew/bin/gh), and the two tools
   # lib/loop-product-operations.mjs pins by exact Cellar path and version (gitleaks 8.30.1, git-filter-repo 2.47.0).
   depends_on "gh"
@@ -73,6 +80,14 @@ class Loop < Formula
 
   def install
     libexec.install Dir["libexec/*"]
+    resource("tart").stage { (libexec/"tart").install "tart.app", "LICENSE" }
+    resource("softnet").stage { (libexec/"tart"/"softnet").install "softnet" }
+    (bin/"tart").write <<~SH
+      #!/bin/bash
+      export PATH="#{opt_libexec}/tart/softnet:$PATH"
+      exec "#{opt_libexec}/tart/tart.app/Contents/MacOS/tart" "$@"
+    SH
+    chmod 0755, bin/"tart"
     (bin/"loop").write <<~SH
       #!/bin/bash
       exec "#{opt_libexec}/node/bin/node" "#{opt_libexec}/services/loop-orchestrator/tools/loop.mjs" "$@"
@@ -84,9 +99,11 @@ class Loop < Formula
     <<~EOS
       Loop runs as a background service and starts itself after every login:
         brew services start deadsimple-xyz/tap/loop
-      Upgrades are `brew upgrade deadsimple-xyz/tap/loop`; the running service moves to the new version by
-      itself. Homebrew asks you to trust a tap formula before a plain `brew upgrade` includes it:
+      Trust the Loop formula once:
         brew trust --formula deadsimple-xyz/tap/loop
+      Then update only Loop (not every outdated Homebrew package):
+        brew upgrade --formula deadsimple-xyz/tap/loop
+      The running service moves to the new version by itself.
     EOS
   end
 
@@ -102,5 +119,6 @@ class Loop < Formula
 
   test do
     assert_match version.to_s, shell_output("#{bin}/loop version")
+    assert_match "2.37.0", shell_output("#{bin}/tart --version")
   end
 end

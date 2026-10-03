@@ -52,10 +52,10 @@ end
 class Loop < Formula
   desc "GitHub-native autonomous product delivery, run as a background service"
   homepage "https://github.com/deadsimple-xyz/loop"
-  url "https://github.com/deadsimple-xyz/loop/releases/download/loop-v0.1.185/loop-0.1.185-darwin-arm64.tar.gz",
+  url "https://github.com/deadsimple-xyz/loop/releases/download/loop-v0.1.186/loop-0.1.186-darwin-arm64.tar.gz",
       using: LoopReleaseDownloadStrategy
-  version "0.1.185"
-  sha256 "03065f013ed149e3f97b69c0c08c15a61437b95055501fc0cba2043b2d00186d"
+  version "0.1.186"
+  sha256 "5400ec47fcc89b317d3b95ade8e1cf4aac4e6232743963ac67f39999313965f6"
 
   depends_on arch: :arm64
   # The host's tunnel connector (infra/loop-host/launchd/loop-cloudflared runs /opt/homebrew/bin/cloudflared).

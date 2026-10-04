@@ -52,10 +52,10 @@ end
 class Loop < Formula
   desc "GitHub-native autonomous product delivery, run as a background service"
   homepage "https://github.com/deadsimple-xyz/loop"
-  url "https://github.com/deadsimple-xyz/loop/releases/download/loop-v0.1.195/loop-0.1.195-darwin-arm64.tar.gz",
+  url "https://github.com/deadsimple-xyz/loop/releases/download/loop-v0.1.196/loop-0.1.196-darwin-arm64.tar.gz",
       using: LoopReleaseDownloadStrategy
-  version "0.1.195"
-  sha256 "1fdf97a758e4a7ee245689146ee6466a0eeb0983ee5c4cdd37b84c526c85461d"
+  version "0.1.196"
+  sha256 "393e50c37b77bd37c6d4c8ced8932af9a74e9b9e438dd6c0b27b0fce5d9e6157"
 
   depends_on arch: :arm64
   # The host's tunnel connector (infra/loop-host/launchd/loop-cloudflared runs /opt/homebrew/bin/cloudflared).
@@ -73,8 +73,6 @@ class Loop < Formula
   # lib/loop-product-operations.mjs pins by exact Cellar path and version (gitleaks 8.30.1, git-filter-repo 2.47.0).
   depends_on "gh"
   depends_on "git-filter-repo"
-  # The manager's GitHub hands: tools/loop-github-mcp.mjs runs `github-mcp-server stdio --toolsets issues`.
-  depends_on "github-mcp-server"
   depends_on "gitleaks"
   depends_on :macos
 

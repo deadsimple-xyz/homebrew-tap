@@ -1,7 +1,4 @@
-# Template of the `loop` formula for the deadsimple-xyz/homebrew-tap tap. The ONLY source of the formula:
-# services/loop-orchestrator/tools/package-loop-release.mjs renders it with the release's version, sha256
-# and repository, and refuses if a placeholder is left (stack.md, Event ingress, "Homebrew distribution").
-
+# Rendered by scripts/render-homebrew-formula.mjs from the released source archive metadata.
 require "download_strategy"
 require "utils/github/api"
 
@@ -50,74 +47,51 @@ class LoopReleaseDownloadStrategy < CurlDownloadStrategy
 end
 
 class Loop < Formula
-  desc "GitHub-native autonomous product delivery, run as a background service"
+  desc "GitHub-native product delivery with disposable Actions workers"
   homepage "https://github.com/deadsimple-xyz/loop"
-  url "https://github.com/deadsimple-xyz/loop/releases/download/loop-v0.1.222/loop-0.1.222-darwin-arm64.tar.gz",
+  url "https://github.com/deadsimple-xyz/loop/releases/download/loop-v0.2.0/loop-0.2.0.tar.gz",
       using: LoopReleaseDownloadStrategy
-  version "0.1.222"
-  sha256 "d3c39303be321aadf8eed5089b6a2f1766d4379b39827acc89b5d1269540b6ea"
+  version "0.2.0"
+  sha256 "c5b2093a8c8be0f68fa563b5f6f15e6b22d578802717215bef4dc441711e35c3"
 
   depends_on arch: :arm64
-  # The host's tunnel connector (infra/loop-host/launchd/loop-cloudflared runs /opt/homebrew/bin/cloudflared).
-  depends_on "cloudflared"
-  # Tart and Softnet are resources of this one formula. No second tap formula or trust step is needed.
+  depends_on :macos
+  depends_on "bash"
+  depends_on "curl"
+  depends_on "jq"
+  depends_on "openssl@3"
+  depends_on "node@22"
+  depends_on "gh"
+
   resource "tart" do
     url "https://github.com/openai/tart/releases/download/2.37.0/tart.tar.gz"
     sha256 "d531752c4dad5d4214ac7ff540cefc2647df1fca2338d413d3c01754f54b356b"
   end
-  resource "softnet" do
-    url "https://github.com/openai/softnet/releases/download/0.23.0/softnet.tar.gz"
-    sha256 "b5daa4e5efaef3c2716f872dcda3961a35b2bddcdf03fe630ac3db0ab8156f3e"
-  end
-  # `loop create`: the GitHub CLI for the owner's token (/opt/homebrew/bin/gh), and the two tools
-  # lib/loop-product-operations.mjs pins by exact Cellar path and version (gitleaks 8.30.1, git-filter-repo 2.47.0).
-  depends_on "gh"
-  depends_on "git-filter-repo"
-  depends_on "gitleaks"
-  depends_on :macos
 
   def install
-    libexec.install Dir["libexec/*"]
+    libexec.install Dir.glob("*", File::FNM_DOTMATCH).reject { |path| [".", ".."].include?(path) }
+    bin.install_symlink libexec/"loop"
     resource("tart").stage { (libexec/"loop-tart").install "tart.app", "LICENSE" }
-    resource("softnet").stage { (libexec/"loop-tart"/"softnet").install "softnet" }
     (libexec/"loop-tart"/"bin").mkpath
     (libexec/"loop-tart"/"bin"/"tart").write <<~SH
       #!/bin/bash
-      export PATH="#{opt_libexec}/loop-tart/softnet:$PATH"
       exec "#{opt_libexec}/loop-tart/tart.app/Contents/MacOS/tart" "$@"
     SH
     chmod 0755, libexec/"loop-tart"/"bin"/"tart"
-    (bin/"loop").write <<~SH
-      #!/bin/bash
-      exec "#{opt_libexec}/node/bin/node" "#{opt_libexec}/services/loop-orchestrator/tools/loop.mjs" "$@"
-    SH
-    chmod 0755, bin/"loop"
   end
 
   def caveats
     <<~EOS
-      Loop runs as a background service and starts itself after every login:
-        brew services start deadsimple-xyz/tap/loop
-      Trust the Loop formula once:
-        brew trust --formula deadsimple-xyz/tap/loop
-      Then update only Loop (not every outdated Homebrew package):
-        brew upgrade --formula deadsimple-xyz/tap/loop
-      The running service moves to the new version by itself.
+      Join a worker with the host's existing registration settings:
+        loop worker join --config /absolute/runner.env --slots N
+      Source tools use Node22 at #{Formula["node@22"].opt_bin}/node.
+      The worker installer manages com.deadsimple.loop.tart-runner.
     EOS
-  end
-
-  service do
-    name macos: "com.deadsimple.loop.service"
-    run [opt_bin/"loop", "service", "--installed-root", opt_libexec/"services/loop-orchestrator"]
-    keep_alive true
-    run_at_load true
-    process_type :background
-    log_path var/"log/loop/service.log"
-    error_log_path var/"log/loop/service.log"
   end
 
   test do
     assert_match version.to_s, shell_output("#{bin}/loop version")
-    assert_match "2.37.0", shell_output("#{libexec}/loop-tart/bin/tart --version")
+    assert_match "loop worker join", shell_output("#{bin}/loop worker join --help 2>&1", 2)
+    assert_match "2.37.0", shell_output("#{opt_libexec}/loop-tart/bin/tart --version")
   end
 end

@@ -49,10 +49,10 @@ end
 class Loop < Formula
   desc "GitHub-native product delivery with disposable Actions workers"
   homepage "https://github.com/deadsimple-xyz/loop"
-  url "https://github.com/deadsimple-xyz/loop/releases/download/loop-v0.2.22/loop-0.2.22.tar.gz",
+  url "https://github.com/deadsimple-xyz/loop/releases/download/loop-v0.2.24/loop-0.2.24.tar.gz",
       using: LoopReleaseDownloadStrategy
-  version "0.2.22"
-  sha256 "6c9d59e6787e3558b5b136ec5970963fdd6f0a7cecd8ff5349b34ff05d0ae78d"
+  version "0.2.24"
+  sha256 "f01e1c01138833c5a14283b70d5c4261ad1184d1a6f03ab4c3e9d83cac3cd9b0"
 
   depends_on arch: :arm64
   depends_on :macos
@@ -64,8 +64,8 @@ class Loop < Formula
   depends_on "gh"
 
   resource "tart" do
-    url "https://github.com/openai/tart/releases/download/2.37.0/tart.tar.gz"
-    sha256 "d531752c4dad5d4214ac7ff540cefc2647df1fca2338d413d3c01754f54b356b"
+    url "https://github.com/openai/tart/releases/download/2.40.1/tart.tar.gz"
+    sha256 "363e2701154a8155cbc1bb6d845430c9b42697d2a186bc49574471ca2877db46"
   end
 
   def install
@@ -85,13 +85,13 @@ class Loop < Formula
       Join a worker with the host's existing registration settings:
         loop worker join --config /absolute/runner.env --slots N
       Source tools use Node22 at #{Formula["node@22"].opt_bin}/node.
-      The worker installer manages com.deadsimple.loop.tart-runner.
+      The worker installer manages xyz.deadsimple.loop.tart-runner.
     EOS
   end
 
   test do
     assert_match version.to_s, shell_output("#{bin}/loop version")
     assert_match "loop worker join", shell_output("#{bin}/loop worker join --help 2>&1", 2)
-    assert_match "2.37.0", shell_output("#{opt_libexec}/loop-tart/bin/tart --version")
+    assert_match "2.40.1", shell_output("#{opt_libexec}/loop-tart/bin/tart --version")
   end
 end

@@ -49,10 +49,10 @@ end
 class Loop < Formula
   desc "GitHub-native product delivery with disposable Actions workers"
   homepage "https://github.com/deadsimple-xyz/loop"
-  url "https://github.com/deadsimple-xyz/loop/releases/download/loop-v0.2.44/loop-0.2.44.tar.gz",
+  url "https://github.com/deadsimple-xyz/loop/releases/download/loop-v0.2.45/loop-0.2.45.tar.gz",
       using: LoopReleaseDownloadStrategy
-  version "0.2.44"
-  sha256 "a70efb602cf4e8c2436c626fc611a795f0ba3a21de8cb23e1299cf32715a31a6"
+  version "0.2.45"
+  sha256 "0065e97b0f70fc02aeed756f6e1acbe25e48c6efc6aa6f095d08e838ecf2cafb"
 
   depends_on arch: :arm64
   depends_on :macos
@@ -83,7 +83,7 @@ class Loop < Formula
   def caveats
     <<~EOS
       Join a worker with the host's existing registration settings:
-        loop worker join --config /absolute/runner.env --slots N
+        loop worker join --config /absolute/runner.env macos:1 linux:N
       Source tools use Node22 at #{Formula["node@22"].opt_bin}/node.
       The worker installer manages xyz.deadsimple.loop.tart-runner.
     EOS

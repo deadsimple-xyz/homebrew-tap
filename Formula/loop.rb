@@ -49,10 +49,10 @@ end
 class Loop < Formula
   desc "GitHub-native product delivery with disposable Actions workers"
   homepage "https://github.com/deadsimple-xyz/loop"
-  url "https://github.com/deadsimple-xyz/loop/releases/download/loop-v0.2.66/loop-0.2.66.tar.gz",
+  url "https://github.com/deadsimple-xyz/loop/releases/download/loop-v0.2.67/loop-0.2.67.tar.gz",
       using: LoopReleaseDownloadStrategy
-  version "0.2.66"
-  sha256 "6a53ca4e2157bedaf77933e63495ebfbda600157d274c8f82947d63e52e99b67"
+  version "0.2.67"
+  sha256 "10a87e649f7ef482f543e165601f1dd315417a3ee2515a44e469afc0bb9fd3f0"
 
   depends_on arch: :arm64
   depends_on :macos
@@ -64,8 +64,8 @@ class Loop < Formula
   depends_on "gh"
 
   resource "tart" do
-    url "https://github.com/openai/tart/releases/download/2.40.1/tart.tar.gz"
-    sha256 "363e2701154a8155cbc1bb6d845430c9b42697d2a186bc49574471ca2877db46"
+    url "https://github.com/openai/tart/releases/download/2.41.1/tart.tar.gz"
+    sha256 "e680a734febccfce7d4e910c1f7f13fc3b00f19a181c945e2d746de3214c32c2"
   end
 
   def install
@@ -92,6 +92,6 @@ class Loop < Formula
   test do
     assert_match version.to_s, shell_output("#{bin}/loop version")
     assert_match "loop worker join", shell_output("#{bin}/loop worker join --help 2>&1", 2)
-    assert_match "2.40.1", shell_output("#{opt_libexec}/loop-tart/bin/tart --version")
+    assert_match "2.41.1", shell_output("#{opt_libexec}/loop-tart/bin/tart --version")
   end
 end

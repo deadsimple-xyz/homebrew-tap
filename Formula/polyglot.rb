@@ -46,10 +46,10 @@ class Polyglot < Formula
   desc "Language-quality checker and native-quality writer for learner texts"
   homepage "https://github.com/deadsimple-xyz/polyglot"
   # version and sha256 are rendered by Loop's shared brew publisher from VERSION and the release asset
-  url "https://github.com/deadsimple-xyz/polyglot/releases/download/polyglot-v0.1.0/polyglot-0.1.0.tar.gz",
+  url "https://github.com/deadsimple-xyz/polyglot/releases/download/polyglot-v0.2.0/polyglot-0.2.0.tar.gz",
       using: PolyglotReleaseDownloadStrategy
-  version "0.1.0"
-  sha256 "db7f36fb7ee0fe8759dc444c9e9a292a1dec0bdea9552efcaacb106999f191bb"
+  version "0.2.0"
+  sha256 "43b19bff804a781b0c002b954d294ee1f327a7cb1acf816a4428e966165ae328"
   license :cannot_represent
 
   depends_on "uv" => :build
@@ -68,8 +68,11 @@ class Polyglot < Formula
 
   def caveats
     <<~EOS
+      API key: set ANTHROPIC_API_KEY, or put it in
+        ~/Library/Application Support/polyglot/.env
       Morph models (up to 9 GB) are not installed. Download them with:
         polyglot models
+      then enable the agreement checks with POLYGLOT_MORPH=1.
       Start LanguageTool for the L1 grammar layer:
         languagetool-server --port 8081
     EOS

@@ -46,10 +46,10 @@ class Polyglot < Formula
   desc "Language-quality checker and native-quality writer for learner texts"
   homepage "https://github.com/deadsimple-xyz/polyglot"
   # version and sha256 are rendered by Loop's shared brew publisher from VERSION and the release asset
-  url "https://github.com/deadsimple-xyz/polyglot/releases/download/polyglot-v0.2.0/polyglot-0.2.0.tar.gz",
+  url "https://github.com/deadsimple-xyz/polyglot/releases/download/polyglot-v0.3.0/polyglot-0.3.0.tar.gz",
       using: PolyglotReleaseDownloadStrategy
-  version "0.2.0"
-  sha256 "43b19bff804a781b0c002b954d294ee1f327a7cb1acf816a4428e966165ae328"
+  version "0.3.0"
+  sha256 "d359ee8061b28ff49da89d4d85eca9a6b11b18bffb3b40c990f248e2fe926b82"
   license :cannot_represent
 
   depends_on "uv" => :build

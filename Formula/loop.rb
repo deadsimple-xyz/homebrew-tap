@@ -49,10 +49,10 @@ end
 class Loop < Formula
   desc "GitHub-native product delivery with disposable Actions workers"
   homepage "https://github.com/deadsimple-xyz/loop"
-  url "https://github.com/deadsimple-xyz/loop/releases/download/loop-v0.3.36/loop-0.3.36.tar.gz",
+  url "https://github.com/deadsimple-xyz/loop/releases/download/loop-v0.3.37/loop-0.3.37.tar.gz",
       using: LoopReleaseDownloadStrategy
-  version "0.3.36"
-  sha256 "662d7131f14ee8c1ef557300061c5a52abdef96ac146013c5812f0491da87e4b"
+  version "0.3.37"
+  sha256 "d8dd24096d36e109b2960afd15d68af8cf92738bca0d9e47a5df6f74d6800bf0"
 
   depends_on arch: :arm64
   depends_on :macos

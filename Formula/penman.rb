@@ -46,10 +46,10 @@ class Penman < Formula
 
   desc "Books to three-level learner editions, report.md and EPUB files"
   homepage "https://github.com/deadsimple-xyz/penman"
-  url "https://github.com/deadsimple-xyz/penman/releases/download/penman-v0.3.2/penman-0.3.2.tar.gz",
+  url "https://github.com/deadsimple-xyz/penman/releases/download/penman-v0.3.3/penman-0.3.3.tar.gz",
       using: PenmanReleaseDownloadStrategy
-  version "0.3.2"
-  sha256 "51eb68070bb220433403f0ad4365d5c75d9c7982e2097f047bbb3d7a0d9078a5"
+  version "0.3.3"
+  sha256 "acc4fae44118c57e483798ed8938dc0257e73a3c55b28538a94e020f2b03fc1d"
 
   depends_on "python@3.12"
   depends_on "rust" => :build # jiter and pydantic-core build from source
